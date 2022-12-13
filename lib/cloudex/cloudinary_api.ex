@@ -183,7 +183,7 @@ defmodule Cloudex.CloudinaryApi do
   defp prepare_opts(%{context: context} = opts) when is_map(context),
     do: %{opts | context: context_to_list(context)} |> prepare_opts()
 
-  defp prepare_opts(opts), do: opts
+  defp prepare_opts(opts), do: Map.drop(opts, [:timeout])
 
   defp url_for(%{resource_type: resource_type}), do: url(resource_type)
   defp url_for(_), do: url("image")
