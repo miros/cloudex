@@ -181,5 +181,6 @@ defmodule Cloudex.Url do
   defp process_option(:rotation, value), do: ["a_#{value}"]
   defp process_option(:video_codec, value), do: ["vc_#{value}"]
   defp process_option(:face, true), do: ["g_face"]
+  defp process_option(:background, value), do: ["b_#{value}"]
   defp process_option(_, _), do: []
 end
