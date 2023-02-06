@@ -93,7 +93,7 @@ defmodule Cloudex.Url do
       base_url(),
       resource_type(options),
       "upload",
-      signature_for(public_id, options, transformations),
+      if(sign_image?(options), do: signature_for(public_id, transformations)),
       if(String.length(transformations) > 0, do: transformations),
       version_for(options),
       public_id
@@ -107,7 +107,7 @@ defmodule Cloudex.Url do
 
   defp append_format(url, options), do: url <> format(options)
 
-  defp signature_for(public_id, %{sign_url: true}, transformations) do
+  defp signature_for(public_id, transformations) do
     to_sign = transformations <> "/#{public_id}" <> Cloudex.Settings.get(:secret)
 
     signature =
@@ -121,7 +121,17 @@ defmodule Cloudex.Url do
     "s--" <> signature <> "--"
   end
 
-  defp signature_for(_, _, _), do: nil
+  defp sign_image?(%{sign_url: true}) do
+    true
+  end
+
+  defp sign_image?(options) when is_list(options) do
+    Enum.any?(options, &match?(%{sign_url: true}, &1))
+  end
+
+  defp sign_image?(_options) do
+    false
+  end
 
   defp version_for(%{version: version}) when is_integer(version), do: "v#{version}"
   defp version_for(_), do: nil
