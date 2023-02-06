@@ -85,7 +85,7 @@ defmodule Cloudex.Url do
   """
 
   @spec for(String.t()) :: String.t()
-  @spec for(String.t(), map) :: String.t()
+  @spec for(String.t(), map | list(map)) :: String.t()
   def for(public_id, options \\ %{}) do
     transformations = transformation_string_from(options)
 
